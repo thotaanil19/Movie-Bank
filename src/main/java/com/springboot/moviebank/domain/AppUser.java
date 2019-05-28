@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Document("User")
-public class ApplicationUser {
+public class AppUser {
 	
 
   @Id

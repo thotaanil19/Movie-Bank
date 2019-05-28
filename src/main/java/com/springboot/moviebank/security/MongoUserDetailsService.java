@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.springboot.moviebank.dao.UserRepository;
-import com.springboot.moviebank.domain.ApplicationUser;
+import com.springboot.moviebank.domain.AppUser;
 
 @Component
 public class MongoUserDetailsService implements UserDetailsService {
@@ -22,7 +22,7 @@ public class MongoUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		ApplicationUser user = repository.findByUsername(username);
+		AppUser user = repository.findByUsername(username);
 
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");

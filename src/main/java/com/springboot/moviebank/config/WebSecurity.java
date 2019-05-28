@@ -1,48 +1,49 @@
-package com.springboot.moviebank.security.config;
+package com.springboot.moviebank.config;
 
+import static com.springboot.moviebank.constants.SecurityConstants.SIGN_UP_URL;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.springboot.moviebank.filter.JWTAuthenticationFilter;
 import com.springboot.moviebank.security.MongoUserDetailsService;
+import com.springboot.moviebank.util.JwtTokenUtil;
 
-@EnableWebSecurity
+@Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
 	private MongoUserDetailsService userDetailsService;
+	
+	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public WebSecurity(MongoUserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-		this.userDetailsService = userDetailsService;
-		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-	}
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().
-		authorizeRequests()
-		.antMatchers(HttpMethod.POST, 
-				SecurityConstants.SIGN_UP_URL, 
-				"swagger-ui.html", "/",
-				"/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**")
-		.permitAll()
-				.anyRequest().authenticated().and().addFilterBefore(new JWTAuthenticationFilter(authenticationManager(), userDetailsService, bCryptPasswordEncoder), UsernamePasswordAuthenticationFilter.class)
-				// .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-				// this disables session creation on Spring Security
+		http.cors().and().csrf().disable().authorizeRequests()
+				.antMatchers(HttpMethod.POST, SIGN_UP_URL, "swagger-ui.html", "/", "/v2/api-docs",
+						"/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html",
+						"/webjars/**")
+				.permitAll().anyRequest().authenticated().and()
+				.addFilterBefore(
+						new JWTAuthenticationFilter(userDetailsService, bCryptPasswordEncoder, jwtTokenUtil),
+						UsernamePasswordAuthenticationFilter.class)
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
@@ -52,11 +53,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
+	public CorsConfigurationSource corsConfigurationSource() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
 		return source;
 	}
 
-	
 }

@@ -2,10 +2,10 @@ package com.springboot.moviebank.dao;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.springboot.moviebank.domain.ApplicationUser;
+import com.springboot.moviebank.domain.AppUser;
 
-public interface UserRepository extends MongoRepository<ApplicationUser, String> {
+public interface UserRepository extends MongoRepository<AppUser, String> {
 
-	ApplicationUser findByUsername(String username);
+	AppUser findByUsername(String username);
 	
 }
