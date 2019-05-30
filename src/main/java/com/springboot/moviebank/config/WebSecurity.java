@@ -24,10 +24,10 @@ import com.springboot.moviebank.util.JwtTokenUtil;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -37,19 +37,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
-				.antMatchers(HttpMethod.POST, SIGN_UP_URL)
-				.permitAll()
-				.antMatchers("swagger-ui.html", "/", "/v2/api-docs",
-						"/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html",
-						"/webjars/**"
-				
-				
-				 ,"/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
-				.permitAll().anyRequest().authenticated().and()
-				.addFilterBefore(
-						new JWTAuthenticationFilter(userDetailsServiceImpl, bCryptPasswordEncoder, jwtTokenUtil),
-						UsernamePasswordAuthenticationFilter.class)
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		.antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+		.antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+		.anyRequest().authenticated().and()
+		.addFilterBefore(
+				new JWTAuthenticationFilter(userDetailsServiceImpl, bCryptPasswordEncoder, jwtTokenUtil),
+				UsernamePasswordAuthenticationFilter.class)
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	@Override
