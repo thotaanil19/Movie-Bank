@@ -46,7 +46,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		HttpServletResponse response = (HttpServletResponse) res;
 
 		String uri = request.getRequestURI();
-		if ("/user/login".equals(uri)) {
+		if ("/user/login2".equals(uri)) {
 			AppUser json = new ObjectMapper().readValue(req.getInputStream(), AppUser.class);
 			String username = json.getUsername();
 			String password = json.getPassword();

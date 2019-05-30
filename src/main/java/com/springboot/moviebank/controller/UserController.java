@@ -10,9 +10,11 @@ import java.util.Date;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +40,9 @@ public class UserController {
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+    private AuthenticationManager authenticationManager;
 
 	@PostMapping("/sign-up")
 	public void signUp(HttpServletResponse res, @RequestBody AppUser user) {
@@ -60,12 +65,27 @@ public class UserController {
 	
 	
 	@PostMapping("/login")
-	public void log(HttpServletResponse res) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = ((User) auth.getPrincipal()).getUsername();
-		String token = jwtTokenUtil.createJWT(username, username, username, EXPIRATION_TIME);
+	public ResponseEntity<String> log(HttpServletResponse res, @RequestBody AppUser user) {
+		/*
+		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 * String username = ((User) auth.getPrincipal()).getUsername(); String token =
+		 * jwtTokenUtil.createJWT(username, username, username, EXPIRATION_TIME);
+		 * 
+		 * res.addHeader(AUTHORIZATION, TOKEN_PREFIX + token);
+		 */
+		
+		Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                		user.getUsername(),
+                        user.getPassword()
+                )
+        );
 
-		res.addHeader(AUTHORIZATION, TOKEN_PREFIX + token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = jwtTokenUtil.createJWT(user.getUsername(), user.getUsername(), user.getUsername(), EXPIRATION_TIME);
+        res.addHeader(AUTHORIZATION, TOKEN_PREFIX + jwt);
+        return ResponseEntity.ok(jwt);
 	}
 
 }

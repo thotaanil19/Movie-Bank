@@ -1,5 +1,7 @@
 package com.springboot.moviebank.controller;
 
+import static com.springboot.moviebank.constants.SecurityConstants.AUTHORIZATION;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +31,7 @@ public class MovieController {
 	private MovieService movieService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Movie> get(@PathVariable String id) {
+	public ResponseEntity<Movie> get(@PathVariable String id, @RequestHeader(AUTHORIZATION) String token) {
 		LOGGER.info("Start: /movie/get/" + id);
 		ResponseEntity<Movie> response = null;
 		try {
@@ -42,7 +45,7 @@ public class MovieController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Movie>> getAll() {
+	public ResponseEntity<List<Movie>> getAll(@RequestHeader(AUTHORIZATION) String token) {
 		LOGGER.info("Start: /movie/get");
 		ResponseEntity<List<Movie>> response = null;
 		try {
@@ -56,7 +59,7 @@ public class MovieController {
 	}
 
 	@GetMapping("/getAllByTitle/{title}")
-	public ResponseEntity<List<Movie>> getAllByTitle(@PathVariable String title) {
+	public ResponseEntity<List<Movie>> getAllByTitle(@PathVariable String title, @RequestHeader(AUTHORIZATION) String token) {
 		LOGGER.info("Start: /movie/get");
 		ResponseEntity<List<Movie>> response = null;
 		try {
@@ -70,7 +73,7 @@ public class MovieController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Movie> save(@RequestBody Movie movie) {
+	public ResponseEntity<Movie> save(@RequestBody Movie movie, @RequestHeader(AUTHORIZATION) String token) {
 		LOGGER.info("Start: /movie/save");
 		ResponseEntity<Movie> response = null;
 		try {
@@ -84,7 +87,7 @@ public class MovieController {
 	}
 
 	@PostMapping("/saveAll")
-	public ResponseEntity<List<Movie>> saveAll(@RequestBody List<Movie> movies) {
+	public ResponseEntity<List<Movie>> saveAll(@RequestBody List<Movie> movies, @RequestHeader(AUTHORIZATION) String token) {
 		LOGGER.info("Start: /movie/saveAll");
 		ResponseEntity<List<Movie>> response = null;
 		try {
@@ -98,7 +101,7 @@ public class MovieController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable String id) {
+	public ResponseEntity<Boolean> delete(@PathVariable String id, @RequestHeader(AUTHORIZATION) String token) {
 		LOGGER.info("Start: /movie/delete(" + id + ")");
 		ResponseEntity<Boolean> response = null;
 		try {
