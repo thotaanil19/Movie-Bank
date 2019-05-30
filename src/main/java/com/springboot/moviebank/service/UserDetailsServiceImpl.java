@@ -1,4 +1,4 @@
-package com.springboot.moviebank.security;
+package com.springboot.moviebank.service;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.springboot.moviebank.dao.UserRepository;
 import com.springboot.moviebank.domain.AppUser;
 
 @Component
-public class MongoUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private UserRepository repository;

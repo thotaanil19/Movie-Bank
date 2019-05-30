@@ -23,6 +23,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.springboot.moviebank.dao.UserRepository;
 import com.springboot.moviebank.domain.AppUser;
+import com.springboot.moviebank.exceptions.UserAlreadyExistsException;
 import com.springboot.moviebank.util.JwtTokenUtil;
 
 @RestController
@@ -40,6 +41,13 @@ public class UserController {
 
 	@PostMapping("/sign-up")
 	public void signUp(HttpServletResponse res, @RequestBody AppUser user) {
+		
+		AppUser userInDB = userRepository.findByUsername(user.getUsername());
+		
+		if (userInDB != null) {
+			throw new UserAlreadyExistsException(user.getUsername());
+		}
+		
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
 		String token = JWT.create().withSubject(user.getUsername())

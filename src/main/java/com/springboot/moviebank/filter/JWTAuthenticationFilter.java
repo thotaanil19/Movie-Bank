@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.moviebank.domain.AppUser;
-import com.springboot.moviebank.security.config.SecurityException;
+import com.springboot.moviebank.exceptions.SecurityException;
 import com.springboot.moviebank.util.JwtTokenUtil;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

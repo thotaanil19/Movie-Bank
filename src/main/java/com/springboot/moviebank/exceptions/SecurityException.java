@@ -1,4 +1,4 @@
-package com.springboot.moviebank.security.config;
+package com.springboot.moviebank.exceptions;
 
 
 import org.springframework.http.HttpStatus;

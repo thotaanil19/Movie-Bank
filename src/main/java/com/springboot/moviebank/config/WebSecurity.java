@@ -18,7 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.springboot.moviebank.filter.JWTAuthenticationFilter;
-import com.springboot.moviebank.security.MongoUserDetailsService;
+import com.springboot.moviebank.service.UserDetailsServiceImpl;
 import com.springboot.moviebank.util.JwtTokenUtil;
 
 @Configuration
@@ -26,7 +26,7 @@ import com.springboot.moviebank.util.JwtTokenUtil;
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private MongoUserDetailsService userDetailsService;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -42,14 +42,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 						"/webjars/**")
 				.permitAll().anyRequest().authenticated().and()
 				.addFilterBefore(
-						new JWTAuthenticationFilter(userDetailsService, bCryptPasswordEncoder, jwtTokenUtil),
+						new JWTAuthenticationFilter(userDetailsServiceImpl, bCryptPasswordEncoder, jwtTokenUtil),
 						UsernamePasswordAuthenticationFilter.class)
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(bCryptPasswordEncoder);
 	}
 
 	@Bean
