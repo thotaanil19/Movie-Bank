@@ -58,19 +58,7 @@ public class MovieController {
 		return response;
 	}
 
-	@GetMapping("/getAllByTitle/{title}")
-	public ResponseEntity<List<Movie>> getAllByTitle(@PathVariable String title, @RequestHeader(AUTHORIZATION) String token) {
-		LOGGER.info("Start: /movie/get");
-		ResponseEntity<List<Movie>> response = null;
-		try {
-			List<Movie> movie = movieService.getAllByTitleWithMongoMorphia(title);
-			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
-		} catch (Exception e) {
-			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		LOGGER.info("End: /movie/get");
-		return response;
-	}
+	
 
 	@PostMapping
 	public ResponseEntity<Movie> save(@RequestBody Movie movie, @RequestHeader(AUTHORIZATION) String token) {
@@ -113,5 +101,88 @@ public class MovieController {
 		LOGGER.info("End: /movie/delete(" + id + ")");
 		return response;
 	}
+	
+	@GetMapping("/getMoviesByTitle/{title}")
+	public ResponseEntity<List<Movie>> getMoviesByTitle(@PathVariable String title, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/getMoviesByTitle");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> movie = movieService.getAllByTitleWithMongoMorphia(title);
+			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/getMoviesByTitle");
+		return response;
+	}
+	
+	@GetMapping("/getMoviesByYear/{year}")
+	public ResponseEntity<List<Movie>> getMoviesByYear(@PathVariable int year, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/getMoviesByYear");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> movie = movieService.getAllByYearWithMongoMorphia(year);
+			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/getMoviesByYear");
+		return response;
+	}
 
+	@GetMapping("/getMoviesByDirector/{director}")
+	public ResponseEntity<List<Movie>> getMoviesByDirector(@PathVariable String director, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/getMoviesByDirector");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> movie = movieService.getAllByDirectorWithMongoMorphia(director);
+			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/getMoviesByDirector");
+		return response;
+	}
+	
+	@GetMapping("/getMoviesByActor/{actor}")
+	public ResponseEntity<List<Movie>> getMoviesByActor(@PathVariable String actor, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/getMoviesByActor");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> movie = movieService.getAllByActorWithMongoMorphia(actor);
+			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/getMoviesByActor");
+		return response;
+	}
+	
+	@GetMapping("/getMoviesByLanguage/{language}")
+	public ResponseEntity<List<Movie>> getMoviesByLanguage(@PathVariable String language, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/getMoviesByDirector");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> movie = movieService.getAllByLanguageWithMongoMorphia(language);
+			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/getMoviesByLanguage");
+		return response;
+	}
+	
+	@GetMapping("/getMoviesByGenre/{genre}")
+	public ResponseEntity<List<Movie>> getMoviesByGenre(@PathVariable String genre, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/getMoviesByGenre");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> movie = movieService.getAllByGenreWithMongoMorphia(genre);
+			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/getMoviesByGenre");
+		return response;
+	}
 }

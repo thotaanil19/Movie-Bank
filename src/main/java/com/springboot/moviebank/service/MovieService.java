@@ -3,7 +3,6 @@ package com.springboot.moviebank.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.mongodb.morphia.Morphia;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,9 @@ public class MovieService {
 	// For using Morphia api
 	@Autowired
 	private MongoClient mongoClient;
+
+	@Autowired
+	private MovieMorphiaRepository movieMorphiaRepository;
 
 	@Value("${spring.data.mongodb.database}")
 	private String dbName;
@@ -101,18 +103,66 @@ public class MovieService {
 	/**
 	 * Get all Movies by name : Using Morphia Api
 	 * 
-	 * @param tiitle
+	 * @param title
 	 * @return List<Movie>
 	 */
 	public List<Movie> getAllByTitleWithMongoMorphia(String title) {
-		Morphia morphia = new Morphia();
-		// morphia.getMapper().getOptions().setObjectFactory(new
-		// ObjenesisObjectFactory());
-		// morphia.getMapper().getOptions().setStoreEmpties(true);
-		MovieMorphiaRepository movieMorphiaRepository = new MovieMorphiaRepository(mongoClient, morphia,
-				mongoDetails.getDatabase());
-		return movieMorphiaRepository.createQuery().field("title").containsIgnoreCase(title)
-				.asList();
+		/*
+		 * Morphia morphia = new Morphia(); MovieMorphiaRepository
+		 * movieMorphiaRepository = new MovieMorphiaRepository(mongoClient, morphia,
+		 * mongoDetails.getDatabase());
+		 */
+		return movieMorphiaRepository.createQuery().field("title").containsIgnoreCase(title).asList();
+	}
+	
+	/**
+	 * Get all Movies by year : Using Morphia Api
+	 * 
+	 * @param year
+	 * @return List<Movie>
+	 */
+	public List<Movie> getAllByYearWithMongoMorphia(int year) {
+		return movieMorphiaRepository.createQuery().field("year").equal(year).asList();
+	}
+	
+	/**
+	 * Get all Movies by Director : Using Morphia Api
+	 * 
+	 * @param director
+	 * @return List<Movie>
+	 */
+	public List<Movie> getAllByDirectorWithMongoMorphia(String director) {
+		return movieMorphiaRepository.createQuery().field("director").containsIgnoreCase(director).asList();
+	}
+	
+	/**
+	 * Get all Movies by actor : Using Morphia Api
+	 * 
+	 * @param actor
+	 * @return List<Movie>
+	 */
+	public List<Movie> getAllByActorWithMongoMorphia(String actor) {
+		return movieMorphiaRepository.createQuery().field("actors").containsIgnoreCase(actor).asList();
+	}
+	
+	/**
+	 * Get all Movies by language : Using Morphia Api
+	 * 
+	 * @param language
+	 * @return List<Movie>
+	 */
+	public List<Movie> getAllByLanguageWithMongoMorphia(String language) {
+		return movieMorphiaRepository.createQuery().field("languages").containsIgnoreCase(language).asList();
+	}
+	
+	/**
+	 * Get all Movies by genre : Using Morphia Api
+	 * 
+	 * @param genre
+	 * @return List<Movie>
+	 */
+	public List<Movie> getAllByGenreWithMongoMorphia(String genre) {
+		return movieMorphiaRepository.createQuery().field("genres").containsIgnoreCase(genre).asList();
 	}
 
 }
