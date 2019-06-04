@@ -41,7 +41,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, SIGN_UP_URL, LOGIN_URL).permitAll()
-		.antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+		.antMatchers("/","/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+		//.antMatchers("/admin/**").hasRole("ADMIN")
+
 		.anyRequest().authenticated().and()
 		.addFilterBefore(
 				new JWTAuthenticationFilter(userDetailsServiceImpl, bCryptPasswordEncoder, jwtTokenUtil),

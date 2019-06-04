@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,48 +60,6 @@ public class MovieController {
 	}
 
 	
-
-	@PostMapping
-	public ResponseEntity<Movie> save(@RequestBody Movie movie, @RequestHeader(AUTHORIZATION) String token) {
-		LOGGER.info("Start: /movie/save");
-		ResponseEntity<Movie> response = null;
-		try {
-			Movie movie2 = movieService.save(movie);
-			response = new ResponseEntity<Movie>(movie2, HttpStatus.OK);
-		} catch (Exception e) {
-			response = new ResponseEntity<Movie>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		LOGGER.info("End: /movie/save");
-		return response;
-	}
-
-	@PostMapping("/saveAll")
-	public ResponseEntity<List<Movie>> saveAll(@RequestBody List<Movie> movies, @RequestHeader(AUTHORIZATION) String token) {
-		LOGGER.info("Start: /movie/saveAll");
-		ResponseEntity<List<Movie>> response = null;
-		try {
-			List<Movie> savedMovies = movieService.save(movies);
-			response = new ResponseEntity<List<Movie>>(savedMovies, HttpStatus.OK);
-		} catch (Exception e) {
-			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		LOGGER.info("End: /movie/save");
-		return response;
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable String id, @RequestHeader(AUTHORIZATION) String token) {
-		LOGGER.info("Start: /movie/delete(" + id + ")");
-		ResponseEntity<Boolean> response = null;
-		try {
-			boolean deleteStatus = movieService.delete(id);
-			response = new ResponseEntity<Boolean>(deleteStatus, HttpStatus.OK);
-		} catch (Exception e) {
-			response = new ResponseEntity<Boolean>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		LOGGER.info("End: /movie/delete(" + id + ")");
-		return response;
-	}
 	
 	@GetMapping("/getMoviesByTitle/{title}")
 	public ResponseEntity<List<Movie>> getMoviesByTitle(@PathVariable String title, @RequestHeader(AUTHORIZATION) String token) {
@@ -183,6 +142,51 @@ public class MovieController {
 			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		LOGGER.info("End: /movie/getMoviesByGenre");
+		return response;
+	}
+	
+	@PostMapping
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<Movie> save(@RequestBody Movie movie, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/save");
+		ResponseEntity<Movie> response = null;
+		try {
+			Movie movie2 = movieService.save(movie);
+			response = new ResponseEntity<Movie>(movie2, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<Movie>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/save");
+		return response;
+	}
+
+	@PostMapping("/saveAll")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<List<Movie>> saveAll(@RequestBody List<Movie> movies, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/saveAll");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> savedMovies = movieService.save(movies);
+			response = new ResponseEntity<List<Movie>>(savedMovies, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/save");
+		return response;
+	}
+
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<Boolean> delete(@PathVariable String id, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/delete(" + id + ")");
+		ResponseEntity<Boolean> response = null;
+		try {
+			boolean deleteStatus = movieService.delete(id);
+			response = new ResponseEntity<Boolean>(deleteStatus, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<Boolean>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/delete(" + id + ")");
 		return response;
 	}
 }

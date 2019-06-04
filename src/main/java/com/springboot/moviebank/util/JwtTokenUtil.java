@@ -10,6 +10,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import com.springboot.moviebank.constants.SecurityConstants;
+import com.springboot.moviebank.dao.JwtTokenRepository;
+import com.springboot.moviebank.exceptions.SecurityException;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -33,6 +36,9 @@ public class JwtTokenUtil {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JwtTokenRepository jwtTokenRepository;
 
 	/**
 	 * Create JWT token
@@ -118,6 +124,18 @@ public class JwtTokenUtil {
 	public Authentication getAuthentication(String token) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+	}
+
+	/**
+	 * Checks given jwt token exists or not in DB
+	 * @param token
+	 */
+	public void isTokenExistsinDB(String token) {
+		boolean flag = jwtTokenRepository.existsById(token);
+		if (!flag) {
+			throw new SecurityException("Invalid JWT token", HttpStatus.UNAUTHORIZED);
+		}
+		
 	}
 
 }

@@ -30,7 +30,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	private JwtTokenUtil jwtTokenUtil;
-
+	
 	public JWTAuthenticationFilter(UserDetailsService userDetailsService,
 			BCryptPasswordEncoder bCryptPasswordEncoder,
 			JwtTokenUtil jwtTokenUtil) {
@@ -60,6 +60,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			String token = jwtTokenUtil.resolveToken((HttpServletRequest) req);
 			if (token != null) {
 				try {
+					jwtTokenUtil.isTokenExistsinDB(token);
 					jwtTokenUtil.validateToken(token);
 				} catch (Exception e) {
 					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");

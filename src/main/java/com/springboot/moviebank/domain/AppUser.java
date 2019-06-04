@@ -16,5 +16,7 @@ public class AppUser {
 
   public String username;
   public String password;
+  public String role;
+  public boolean isActive;
   
 }

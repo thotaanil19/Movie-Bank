@@ -7,12 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.mongodb.MongoClient;
 import com.springboot.moviebank.dao.MovieRepository;
 import com.springboot.moviebank.dao.morphia.MovieMorphiaRepository;
 import com.springboot.moviebank.domain.Movie;
@@ -25,14 +21,6 @@ public class MovieService {
 
 	@Autowired
 	private MovieRepository movieRepository;
-
-	// For using mongo template
-	@Autowired
-	private MongoTemplate mongoTemplate;
-
-	// For using Morphia api
-	@Autowired
-	private MongoClient mongoClient;
 
 	@Autowired
 	private MovieMorphiaRepository movieMorphiaRepository;
@@ -88,16 +76,6 @@ public class MovieService {
 		movieRepository.deleteById(id);
 		LOGGER.debug("End: movieService.delete(" + id + ")");
 		return status;
-	}
-
-	/**
-	 * Get all Movies by name : Using MongoTemplate
-	 * 
-	 * @param tiitle
-	 * @return List<Movie>
-	 */
-	public List<Movie> getAllByNameWithMongoTemplate(String title) {
-		return mongoTemplate.find(Query.query(Criteria.where("Title").is(title)), Movie.class);
 	}
 
 	/**
