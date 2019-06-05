@@ -6,13 +6,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.springboot.moviebank.dao.MovieRepository;
 import com.springboot.moviebank.dao.morphia.MovieMorphiaRepository;
 import com.springboot.moviebank.domain.Movie;
-import com.springboot.moviebank.dto.MongoDetails;
 
 @Service
 public class MovieService {
@@ -24,12 +22,6 @@ public class MovieService {
 
 	@Autowired
 	private MovieMorphiaRepository movieMorphiaRepository;
-
-	@Value("${spring.data.mongodb.database}")
-	private String dbName;
-
-	@Autowired
-	private MongoDetails mongoDetails;
 
 	public Movie get(String id) {
 		LOGGER.debug("Start: movieService.get(" + id + ")");
