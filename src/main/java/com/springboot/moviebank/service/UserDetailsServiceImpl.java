@@ -11,10 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.springboot.moviebank.dao.JwtTokenRepository;
 import com.springboot.moviebank.dao.UserRepository;
 import com.springboot.moviebank.domain.AppUser;
-import com.springboot.moviebank.domain.JwtToken;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
