@@ -110,7 +110,7 @@ public class MovieService {
 	 * @return List<Movie>
 	 */
 	public List<Movie> getAllByDirectorWithMongoMorphia(String director) {
-		return movieMorphiaRepository.createQuery().field("director").containsIgnoreCase(director).asList();
+		return movieMorphiaRepository.createQuery().field("directors").containsIgnoreCase(director).asList();
 	}
 	
 	/**
@@ -141,6 +141,16 @@ public class MovieService {
 	 */
 	public List<Movie> getAllByGenreWithMongoMorphia(String genre) {
 		return movieMorphiaRepository.createQuery().field("genres").containsIgnoreCase(genre).asList();
+	}
+	
+	/**
+	 * Get all Movies by country : Using Morphia Api
+	 * 
+	 * @param country
+	 * @return List<Movie>
+	 */
+	public List<Movie> getAllByCountryWithMongoMorphia(String country) {
+		return movieMorphiaRepository.createQuery().field("country").containsIgnoreCase(country).asList();
 	}
 
 }

@@ -145,6 +145,20 @@ public class MovieController {
 		return response;
 	}
 	
+	@GetMapping("/getMoviesByCountry/{country}")
+	public ResponseEntity<List<Movie>> getMoviesByCountry(@PathVariable String country, @RequestHeader(AUTHORIZATION) String token) {
+		LOGGER.info("Start: /movie/getMoviesByCountry");
+		ResponseEntity<List<Movie>> response = null;
+		try {
+			List<Movie> movie = movieService.getAllByCountryWithMongoMorphia(country);
+			response = new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		LOGGER.info("End: /movie/getMoviesByCountry");
+		return response;
+	}
+	
 	@PostMapping
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Movie> save(@RequestBody Movie movie, @RequestHeader(AUTHORIZATION) String token) {

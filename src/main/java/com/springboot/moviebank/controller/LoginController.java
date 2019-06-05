@@ -67,6 +67,8 @@ public class LoginController {
 		}
 
 		AppUser user = new AppUser();
+		user.setName(signUpRequestDTO.getName());
+		user.setEmail(signUpRequestDTO.getEmail());
 		user.setUsername(signUpRequestDTO.getUsername());
 		user.setPassword(bCryptPasswordEncoder.encode(signUpRequestDTO.getPassword()));
 		user.setRole(signUpRequestDTO.getRole());
@@ -88,8 +90,8 @@ public class LoginController {
 
 	}
 
-	@PostMapping("/un-register")
-	public ResponseEntity<String> un_register(HttpServletResponse res, @RequestHeader(AUTHORIZATION) String token) {
+	@PostMapping("/unregister")
+	public ResponseEntity<String> unregister(HttpServletResponse res, @RequestHeader(AUTHORIZATION) String token) {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -124,7 +126,7 @@ public class LoginController {
 		return response;// ResponseEntity.ok(jwt);
 	}
 
-	@PostMapping("/signout")
+	@PostMapping("/logout")
 	@ResponseBody
 	public ResponseEntity<String> logout(@RequestHeader(AUTHORIZATION) String token) {
 		HttpHeaders headers = new HttpHeaders();

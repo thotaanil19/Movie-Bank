@@ -9,14 +9,14 @@ import lombok.Data;
 @Data
 @Document("User")
 public class AppUser {
-	
 
-  @Id
-  public ObjectId _id;
+	@Id
+	public ObjectId _id;
+	private String name;
+	private String email;
+	public String username;
+	public String password;
+	public String role;
+	public boolean isActive;
 
-  public String username;
-  public String password;
-  public String role;
-  public boolean isActive;
-  
 }

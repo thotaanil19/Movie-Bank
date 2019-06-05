@@ -52,9 +52,9 @@ public class Movie {
 	@Property("Languages")
 	private List<String> languages;
 	
-	@Field("Director")
-	@Property("Director")
-	private String director;
+	@Field("Directors")
+	@Property("Directors")
+	private List<String> directors;
 	
 	@Field("Poster")
 	@Property("Poster")
@@ -68,6 +68,10 @@ public class Movie {
 	@Property("Runtime")
 	private String runtime;
 	
+	
+	@Field("Country")
+	@Property("Country")
+	private String country;
 	
 	
 		
